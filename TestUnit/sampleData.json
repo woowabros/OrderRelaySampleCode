@@ -1,0 +1,53 @@
+{
+"menus":[
+{"title":"탕수육 중", "quantity":3, "amount":28000, "paymentType":0},
+{"title":"보쌈세트 대", "quantity":2, "amount":32000, "paymentType":1},
+{"title":"까르보나라 스파게티", "quantity":3, "amount":38000, "paymentType":2},
+{"title":"부대찌개 대", "quantity":2, "amount":42000, "paymentType":0},
+{"title":"아메리카노", "quantity":6, "amount":28000, "paymentType":1},
+{"title":"감자탕세트", "quantity":2, "amount":48000, "paymentType":2}
+],
+"addresses":[
+{
+"orderNo":"B0D20000TL",
+"latitude":37.51695477,
+"longitude":127.11286649,
+"addressJibun":"서울 송파구 방이동 44-2",
+"addressRoad":"서울 송파구 위례성대로 2",
+"addressDetail":"우아한형제들 2층"
+},
+{
+"orderNo":"B0D20000VT",
+"latitude":37.51490687,
+"longitude":127.1029556,
+"addressJibun":"서울 송파구 신천동 7-22",
+"addressRoad":"서울 송파구 올림픽로 295",
+"addressDetail":"7층 우아한형제들"
+},
+{
+"orderNo":"B0D20000TS",
+"latitude":37.51418476,
+"longitude":127.10403885,
+"addressJibun":"서울 송파구 신천동 29",
+"addressRoad":"서울 송파구 올림픽로 300",
+"addressDetail":"1층 테스트매장"
+},
+{
+"orderNo":"B0D20000VV",
+"latitude":37.51232374,
+"longitude":127.09762282,
+"addressJibun":"서울 송파구 잠실동 40-1",
+"addressRoad":"서울 송파구 올림픽로 240",
+"addressDetail":"롯데월드 입구"
+},
+{
+"orderNo":"B0D20000LK",
+"phoneNo":"01025316676",
+"latitude":37.51293508,
+"longitude":127.11406575,
+"addressJibun":"서울 송파구 방이동 149-4",
+"addressRoad":"서울 송파구 백제고분로 478",
+"addressDetail":"3층 대면상담센터"
+}
+]
+}
