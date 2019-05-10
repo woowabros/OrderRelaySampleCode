@@ -77,13 +77,21 @@ implementation
 
 uses CreateDelivery;
 
+{$IFDEF WIN64}
+function RegisterNewDeliveryFunction(AEvent: TOnNewDeliveryFunc): Boolean; stdcall; external 'BMOrderRelayx64.dll';
+function RegisterStatusChangedFunction(AEvent: TOnStatusChangedProc): Boolean; stdcall; external 'BMOrderRelayx64.dll';
+function RegisterDisconnectedFunction(AEvent: TOnDisconnectedProc): Boolean; stdcall; external 'BMOrderRelayx64.dll';
+function InitializeService(ASignKey: PWideChar): Integer; stdcall; external 'BMOrderRelayx64.dll';
+function FinalizeService(): Integer; stdcall; external 'BMOrderRelayx64.dll';
+function SetDeliveryCompleted(AOrderNo: PWideChar): Boolean; stdcall; external 'BMOrderRelayx64.dll';
+{$ELSE}
 function RegisterNewDeliveryFunction(AEvent: TOnNewDeliveryFunc): Boolean; stdcall; external 'BMOrderRelay.dll';
-function RegisterStatusChangedFunction(AEvent: TOnStatusChangedProc): Boolean; stdcall; external 'BMOrderRelay.dll'; 
+function RegisterStatusChangedFunction(AEvent: TOnStatusChangedProc): Boolean; stdcall; external 'BMOrderRelay.dll';
 function RegisterDisconnectedFunction(AEvent: TOnDisconnectedProc): Boolean; stdcall; external 'BMOrderRelay.dll';
 function InitializeService(ASignKey: PWideChar): Integer; stdcall; external 'BMOrderRelay.dll';
 function FinalizeService(): Integer; stdcall; external 'BMOrderRelay.dll';
 function SetDeliveryCompleted(AOrderNo: PWideChar): Boolean; stdcall; external 'BMOrderRelay.dll';
-
+{$ENDIF}
 
 { TFrmBaminOrderRelationMain }
 
