@@ -31,30 +31,104 @@ Public Class FrmBaminOrderRelationMain
 
 
 
-    <DllImport("BMOrderRelay.dll", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    <DllImport("BMOrderRelay.dll", EntryPoint:="InitializeService", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function InitializeService32(ByVal ASignKey As String) As Integer
+
+    End Function
+    <DllImport("BMOrderRelay.dll", EntryPoint:="FinalizeService", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function FinalizeService32() As Integer
+
+    End Function
+    <DllImport("BMOrderRelay.dll", EntryPoint:="RegisterNewDeliveryFunction", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function RegisterNewDeliveryFunction32(ByVal AEvent As TOnNewDeliveryFunc) As Boolean
+
+    End Function
+    <DllImport("BMOrderRelay.dll", EntryPoint:="RegisterStatusChangedFunction", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function RegisterStatusChangedFunction32(ByVal AEvent As TOnStatusChangedProc) As Boolean
+
+    End Function
+    <DllImport("BMOrderRelay.dll", EntryPoint:="RegisterDisconnectedFunction", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function RegisterDisconnectedFunction32(ByVal AEvent As TOnDisconnectedProc) As Boolean
+
+    End Function
+    <DllImport("BMOrderRelay.dll", EntryPoint:="SetDeliveryCompleted", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function SetDeliveryCompleted32(ByVal AOrderNo As String) As Boolean
+
+    End Function
+
+    <DllImport("BMOrderRelayx64.dll", EntryPoint:="InitializeService", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function InitializeService64(ByVal ASignKey As String) As Integer
+
+    End Function
+    <DllImport("BMOrderRelayx64.dll", EntryPoint:="FinalizeService", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function FinalizeService64() As Integer
+
+    End Function
+    <DllImport("BMOrderRelayx64.dll", EntryPoint:="RegisterNewDeliveryFunction", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function RegisterNewDeliveryFunction64(ByVal AEvent As TOnNewDeliveryFunc) As Boolean
+
+    End Function
+    <DllImport("BMOrderRelayx64.dll", EntryPoint:="RegisterStatusChangedFunction", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function RegisterStatusChangedFunction64(ByVal AEvent As TOnStatusChangedProc) As Boolean
+
+    End Function
+    <DllImport("BMOrderRelayx64.dll", EntryPoint:="RegisterDisconnectedFunction", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function RegisterDisconnectedFunction64(ByVal AEvent As TOnDisconnectedProc) As Boolean
+
+    End Function
+    <DllImport("BMOrderRelayx64.dll", EntryPoint:="SetDeliveryCompleted", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function SetDeliveryCompleted64(ByVal AOrderNo As String) As Boolean
+
+    End Function
+
     Public Shared Function InitializeService(ByVal ASignKey As String) As Integer
-
+        If (Environment.Is64BitOperatingSystem = True) Then
+            Return InitializeService64(ASignKey)
+        Else
+            Return InitializeService32(ASignKey)
+        End If
     End Function
-    <DllImport("BMOrderRelay.dll", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+
     Public Shared Function FinalizeService() As Integer
-
+        If (Environment.Is64BitOperatingSystem = True) Then
+            Return FinalizeService64()
+        Else
+            Return FinalizeService32()
+        End If
     End Function
-    <DllImport("BMOrderRelay.dll", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+
     Public Shared Function RegisterNewDeliveryFunction(ByVal AEvent As TOnNewDeliveryFunc) As Boolean
-
+        If (Environment.Is64BitOperatingSystem = True) Then
+            Return RegisterNewDeliveryFunction64(AEvent)
+        Else
+            Return RegisterNewDeliveryFunction32(AEvent)
+        End If
     End Function
-    <DllImport("BMOrderRelay.dll", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+
     Public Shared Function RegisterStatusChangedFunction(ByVal AEvent As TOnStatusChangedProc) As Boolean
-
+        If (Environment.Is64BitOperatingSystem = True) Then
+            Return RegisterStatusChangedFunction64(AEvent)
+        Else
+            Return RegisterStatusChangedFunction32(AEvent)
+        End If
     End Function
-    <DllImport("BMOrderRelay.dll", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+
     Public Shared Function RegisterDisconnectedFunction(ByVal AEvent As TOnDisconnectedProc) As Boolean
-
+        If (Environment.Is64BitOperatingSystem = True) Then
+            Return RegisterDisconnectedFunction64(AEvent)
+        Else
+            Return RegisterDisconnectedFunction32(AEvent)
+        End If
     End Function
-    <DllImport("BMOrderRelay.dll", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+
     Public Shared Function SetDeliveryCompleted(ByVal AOrderNo As String) As Boolean
-
+        If (Environment.Is64BitOperatingSystem = True) Then
+            Return SetDeliveryCompleted64(AOrderNo)
+        Else
+            Return SetDeliveryCompleted32(AOrderNo)
+        End If
     End Function
+
 
     Public Sub New()
         InitializeComponent()

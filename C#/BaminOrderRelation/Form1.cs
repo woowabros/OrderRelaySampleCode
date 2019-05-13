@@ -28,36 +28,90 @@ namespace BaminOrderRelation
 
         public delegate bool TOnNewDeliveryFunc([MarshalAs(UnmanagedType.LPWStr)] string AOrderNo, [MarshalAs(UnmanagedType.LPWStr)] string ARoadNameAddress,
             [MarshalAs(UnmanagedType.LPWStr)] string AAddress, [MarshalAs(UnmanagedType.LPWStr)] string AAddressDetail, [MarshalAs(UnmanagedType.LPWStr)] string APhoneNo,
-            [MarshalAs(UnmanagedType.LPWStr)] string ALatitude, [MarshalAs(UnmanagedType.LPWStr)] string ALongitude, [MarshalAs(UnmanagedType.LPWStr)] string ATitle, 
+            [MarshalAs(UnmanagedType.LPWStr)] string ALatitude, [MarshalAs(UnmanagedType.LPWStr)] string ALongitude, [MarshalAs(UnmanagedType.LPWStr)] string ATitle,
             int AQuantity, int AAmount, int APaymentType);
         public delegate void TOnStatusChangedProc([MarshalAs(UnmanagedType.LPWStr)] string AOrderNo, int AOrderStatus);
         public delegate void TOnDisconnectedProc();
-
-        [DllImport("BMOrderRelay.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        public static extern int InitializeService(string ASignKey);
-
-        [DllImport("BMOrderRelay.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        public static extern int FinalizeService();
-
-        [DllImport("BMOrderRelay.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool RegisterNewDeliveryFunction(TOnNewDeliveryFunc AEvent);
-
-        [DllImport("BMOrderRelay.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool RegisterStatusChangedFunction(TOnStatusChangedProc AEvent);
-
-        [DllImport("BMOrderRelay.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool RegisterDisconnectedFunction(TOnDisconnectedProc AEvent);
-
-        [DllImport("BMOrderRelay.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SetDeliveryCompleted(string AOrderNo);
-
+        
         public TOnNewDeliveryFunc s_newDeliveryFunc;
         public TOnStatusChangedProc s_statusChangedProc;
         public TOnDisconnectedProc s_disconnectedProc;
+
+        [DllImport("BMOrderRelayx64.dll", EntryPoint = "InitializeService", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        public static extern int InitializeService64(string ASignKey);
+
+        [DllImport("BMOrderRelayx64.dll", EntryPoint = "FinalizeService", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        public static extern int FinalizeService64();
+
+        [DllImport("BMOrderRelayx64.dll", EntryPoint = "RegisterNewDeliveryFunction", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RegisterNewDeliveryFunction64(TOnNewDeliveryFunc AEvent);
+
+        [DllImport("BMOrderRelayx64.dll", EntryPoint = "RegisterStatusChangedFunction", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RegisterStatusChangedFunction64(TOnStatusChangedProc AEvent);
+
+        [DllImport("BMOrderRelayx64.dll", EntryPoint = "RegisterDisconnectedFunction", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RegisterDisconnectedFunction64(TOnDisconnectedProc AEvent);
+
+        [DllImport("BMOrderRelayx64.dll", EntryPoint = "SetDeliveryCompleted", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetDeliveryCompleted64(string AOrderNo);
+
+
+
+        [DllImport("BMOrderRelay.dll", EntryPoint = "InitializeService", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        public static extern int InitializeService32(string ASignKey);
+
+        [DllImport("BMOrderRelay.dll", EntryPoint = "FinalizeService", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        public static extern int FinalizeService32();
+
+        [DllImport("BMOrderRelay.dll", EntryPoint = "RegisterNewDeliveryFunction", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RegisterNewDeliveryFunction32(TOnNewDeliveryFunc AEvent);
+
+        [DllImport("BMOrderRelay.dll", EntryPoint = "RegisterStatusChangedFunction", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RegisterStatusChangedFunction32(TOnStatusChangedProc AEvent);
+
+        [DllImport("BMOrderRelay.dll", EntryPoint = "RegisterDisconnectedFunction", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RegisterDisconnectedFunction32(TOnDisconnectedProc AEvent);
+
+        [DllImport("BMOrderRelay.dll", EntryPoint = "SetDeliveryCompleted", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetDeliveryCompleted32(string AOrderNo);
+
+        public static int InitializeService(string ASignKey)
+        {
+            return Environment.Is64BitOperatingSystem ? InitializeService64(ASignKey) : InitializeService32(ASignKey);
+        }
+
+        public static int FinalizeService()
+        {
+            return Environment.Is64BitOperatingSystem ? FinalizeService64() : FinalizeService32();
+        }
+
+        public static bool RegisterNewDeliveryFunction(TOnNewDeliveryFunc AEvent)
+        {
+            return Environment.Is64BitOperatingSystem ? RegisterNewDeliveryFunction64(AEvent) : RegisterNewDeliveryFunction32(AEvent);
+        }
+
+        public static bool RegisterStatusChangedFunction(TOnStatusChangedProc AEvent)
+        {
+            return Environment.Is64BitOperatingSystem ? RegisterStatusChangedFunction64(AEvent) : RegisterStatusChangedFunction32(AEvent);
+        }
+
+        public static bool RegisterDisconnectedFunction(TOnDisconnectedProc AEvent)
+        {
+            return Environment.Is64BitOperatingSystem ? RegisterDisconnectedFunction64(AEvent) : RegisterDisconnectedFunction32(AEvent);
+        }
+
+        public static bool SetDeliveryCompleted(string AOrderNo)
+        {
+            return Environment.Is64BitOperatingSystem ? SetDeliveryCompleted64(AOrderNo) : SetDeliveryCompleted32(AOrderNo);
+        }
 
         public FrmBaminOrderRelationMain()
         {
@@ -66,6 +120,8 @@ namespace BaminOrderRelation
             s_newDeliveryFunc = this.MyOnNewDeliveryFunc;
             s_statusChangedProc = this.MyOnStatusChangedProc;
             s_disconnectedProc = this.MyOnDisconnectedProc;
+
+
 
         }
 
