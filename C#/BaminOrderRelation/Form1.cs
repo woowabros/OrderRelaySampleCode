@@ -25,11 +25,15 @@ namespace BaminOrderRelation
         const int OS_COMPLETED = 2;
         const int OS_CANCELED = 3;
 
+        const int DS_RIDER_ASSIGNED = 0;
+        const int DS_PICKUP_COMPLETED = 1;
+        const int DS_DELIVERY_COMPLETED = 2;
+
 
         public delegate bool TOnNewDeliveryFunc([MarshalAs(UnmanagedType.LPWStr)] string AOrderNo, [MarshalAs(UnmanagedType.LPWStr)] string ARoadNameAddress,
             [MarshalAs(UnmanagedType.LPWStr)] string AAddress, [MarshalAs(UnmanagedType.LPWStr)] string AAddressDetail, [MarshalAs(UnmanagedType.LPWStr)] string APhoneNo,
             [MarshalAs(UnmanagedType.LPWStr)] string ALatitude, [MarshalAs(UnmanagedType.LPWStr)] string ALongitude, [MarshalAs(UnmanagedType.LPWStr)] string ATitle,
-            int AQuantity, int AAmount, int APaymentType);
+            int AQuantity, int AAmount, int APaymentType, [MarshalAs(UnmanagedType.LPWStr)] string AMemo);
         public delegate void TOnStatusChangedProc([MarshalAs(UnmanagedType.LPWStr)] string AOrderNo, int AOrderStatus);
         public delegate void TOnDisconnectedProc();
         
@@ -59,7 +63,9 @@ namespace BaminOrderRelation
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetDeliveryCompleted64(string AOrderNo);
 
-
+        [DllImport("BMOrderRelayx64.dll", EntryPoint = "UpdateDeliveryStatus", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool UpdateDeliveryStatus64(string AOrderNo, int ADeliveryStatus, string ARiderKey, string ARiderName, int ETA);
 
         [DllImport("BMOrderRelay.dll", EntryPoint = "InitializeService", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         public static extern int InitializeService32(string ASignKey);
@@ -82,6 +88,10 @@ namespace BaminOrderRelation
         [DllImport("BMOrderRelay.dll", EntryPoint = "SetDeliveryCompleted", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetDeliveryCompleted32(string AOrderNo);
+
+        [DllImport("BMOrderRelay.dll", EntryPoint = "UpdateDeliveryStatus", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool UpdateDeliveryStatus32(string AOrderNo, int ADeliveryStatus, string ARiderKey, string ARiderName, int ETA);
 
         public static int InitializeService(string ASignKey)
         {
@@ -113,6 +123,11 @@ namespace BaminOrderRelation
             return Environment.Is64BitOperatingSystem ? SetDeliveryCompleted64(AOrderNo) : SetDeliveryCompleted32(AOrderNo);
         }
 
+        public static bool UpdateDeliveryStatus(string AOrderNo, int ADeliveryStatus, string ARiderKey, string ARiderName, int ETA)
+        {
+            return Environment.Is64BitOperatingSystem ? UpdateDeliveryStatus64(AOrderNo, ADeliveryStatus, ARiderKey, ARiderName, ETA) : UpdateDeliveryStatus32(AOrderNo, ADeliveryStatus, ARiderKey, ARiderName, ETA);
+        }
+
         public FrmBaminOrderRelationMain()
         {
             InitializeComponent();
@@ -120,9 +135,6 @@ namespace BaminOrderRelation
             s_newDeliveryFunc = this.MyOnNewDeliveryFunc;
             s_statusChangedProc = this.MyOnStatusChangedProc;
             s_disconnectedProc = this.MyOnDisconnectedProc;
-
-
-
         }
 
         private void btnSetDeliveryCompleted_Click(object sender, EventArgs e)
@@ -142,7 +154,7 @@ namespace BaminOrderRelation
 
         private void btnInitializeService_Click(object sender, EventArgs e)
         {
-            if (InitializeService("Test Mode Gear") != S_OK) {
+            if (InitializeService("hJTk2rWrfc6C1UEmk9Uvc2MGpUuOpEw3q8i1/4+EUcFObqlNhzCvVHFM") != S_OK) {
                 MessageBox.Show("InitializeService Failed");
             }
             richTextBox1.AppendText("Initialize Service" + Environment.NewLine);
@@ -169,7 +181,7 @@ namespace BaminOrderRelation
         }
          
         private bool MyOnNewDeliveryFunc(string AOrderNo, string ARoadNameAddress, string AAddress, string AAddressDetail, string APhoneNo,
-            string ALatitude, string ALongitude, string ATitle, int AQuantity, int AAmount, int APaymentType)
+            string ALatitude, string ALongitude, string ATitle, int AQuantity, int AAmount, int APaymentType, string AMemo)
         {
             //MessageBox.Show("AOrderNo:" + AOrderNo);
             Invoke(new MethodInvoker(delegate ()
@@ -185,6 +197,7 @@ namespace BaminOrderRelation
                 richTextBox1.AppendText("ATitle: " + ATitle + Environment.NewLine);
                 richTextBox1.AppendText("AQuantity: " + AQuantity + Environment.NewLine);
                 richTextBox1.AppendText("AAmount: " + AAmount + Environment.NewLine);
+                richTextBox1.AppendText("AMemo: " + AMemo + Environment.NewLine);
                 switch (APaymentType)
                 {
                     case PT_PREPAYED:
@@ -274,5 +287,36 @@ namespace BaminOrderRelation
             Invoke(new MethodInvoker(delegate () { richTextBox1.AppendText("Disconnected!!!" + Environment.NewLine); }));
         }
 
+        private void btnUpdateDeliveryStatus_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedIndices.Count <= 0)
+            {
+                return;
+            }
+            int intselectedindex = listView1.SelectedIndices[0];
+            if (intselectedindex >= 0)
+            {
+                Form3 changeRiderStatus = new Form3();
+                
+
+                String text = listView1.Items[intselectedindex].Text;
+                changeRiderStatus.tbOrderNo.Text = text;
+
+                DialogResult Res = changeRiderStatus.ShowDialog(this);
+                if (Res == DialogResult.OK)
+                {
+                    int DeliveryStatus = DS_RIDER_ASSIGNED;
+                    if (changeRiderStatus.rbRiderAssigned.Checked == true)
+                        DeliveryStatus = DS_RIDER_ASSIGNED;
+                    else if (changeRiderStatus.rbPickupCompleted.Checked == true)
+                        DeliveryStatus = DS_PICKUP_COMPLETED;
+                    else if (changeRiderStatus.rbDeliveryCompleted.Checked == true)
+                        DeliveryStatus = DS_DELIVERY_COMPLETED;
+
+                    UpdateDeliveryStatus(changeRiderStatus.tbOrderNo.Text, DeliveryStatus, changeRiderStatus.tbRiderCode.Text, changeRiderStatus.tbRiderName.Text, Convert.ToInt32(changeRiderStatus.tbETA.Text));
+                }
+
+            }
+        }
     }
 }

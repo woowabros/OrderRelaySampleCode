@@ -11,6 +11,7 @@ object FrmBaminOrderRelationMain: TFrmBaminOrderRelationMain
   Font.Name = #45208#45588#48148#47480#44256#46357
   Font.Style = []
   OldCreateOrder = False
+  OnShow = FormShow
   DesignSize = (
     1012
     675)
@@ -81,7 +82,7 @@ object FrmBaminOrderRelationMain: TFrmBaminOrderRelationMain
     OnClick = ListView1Click
   end
   object btnSetDeliveryCompleted: TButton
-    Left = 860
+    Left = 718
     Top = 25
     Width = 136
     Height = 33
@@ -98,5 +99,15 @@ object FrmBaminOrderRelationMain: TFrmBaminOrderRelationMain
     Caption = '3. '#49436#48708#49828' '#51333#47308
     TabOrder = 5
     OnClick = btnFinalizeServiceClick
+  end
+  object btnChangeRiderStatus: TButton
+    Left = 860
+    Top = 25
+    Width = 136
+    Height = 33
+    Anchors = [akTop, akRight]
+    Caption = #46972#51060#45908' '#49345#53468' '#48320#44221
+    TabOrder = 6
+    OnClick = btnChangeRiderStatusClick
   end
 end

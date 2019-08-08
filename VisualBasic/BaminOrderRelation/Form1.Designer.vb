@@ -32,6 +32,7 @@ Partial Class FrmBaminOrderRelationMain
         Me.BtnFinalizeService = New System.Windows.Forms.Button()
         Me.BtnSetDeliveryCompleted = New System.Windows.Forms.Button()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+        Me.btnUpdateDeliveryStatus = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'ListView1
@@ -99,7 +100,7 @@ Partial Class FrmBaminOrderRelationMain
         'BtnSetDeliveryCompleted
         '
         Me.BtnSetDeliveryCompleted.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnSetDeliveryCompleted.Location = New System.Drawing.Point(1637, 12)
+        Me.BtnSetDeliveryCompleted.Location = New System.Drawing.Point(1408, 12)
         Me.BtnSetDeliveryCompleted.Name = "BtnSetDeliveryCompleted"
         Me.BtnSetDeliveryCompleted.Size = New System.Drawing.Size(262, 39)
         Me.BtnSetDeliveryCompleted.TabIndex = 4
@@ -116,11 +117,22 @@ Partial Class FrmBaminOrderRelationMain
         Me.RichTextBox1.TabIndex = 5
         Me.RichTextBox1.Text = ""
         '
+        'btnUpdateDeliveryStatus
+        '
+        Me.btnUpdateDeliveryStatus.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnUpdateDeliveryStatus.Location = New System.Drawing.Point(1676, 12)
+        Me.btnUpdateDeliveryStatus.Name = "btnUpdateDeliveryStatus"
+        Me.btnUpdateDeliveryStatus.Size = New System.Drawing.Size(223, 39)
+        Me.btnUpdateDeliveryStatus.TabIndex = 7
+        Me.btnUpdateDeliveryStatus.Text = "라이더 상태변경"
+        Me.btnUpdateDeliveryStatus.UseVisualStyleBackColor = True
+        '
         'FrmBaminOrderRelationMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 18.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1911, 1021)
+        Me.Controls.Add(Me.btnUpdateDeliveryStatus)
         Me.Controls.Add(Me.RichTextBox1)
         Me.Controls.Add(Me.BtnSetDeliveryCompleted)
         Me.Controls.Add(Me.BtnFinalizeService)
@@ -143,4 +155,5 @@ Partial Class FrmBaminOrderRelationMain
     Friend WithEvents BtnFinalizeService As Button
     Friend WithEvents BtnSetDeliveryCompleted As Button
     Friend WithEvents RichTextBox1 As RichTextBox
+    Private WithEvents btnUpdateDeliveryStatus As Button
 End Class

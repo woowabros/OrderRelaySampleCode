@@ -12,6 +12,10 @@ Public Class FrmBaminOrderRelationMain
     Const OS_COMPLETED As Integer = 2
     Const OS_CANCELED As Integer = 3
 
+    Const DS_RIDER_ASSIGNED As Integer = 0
+    Const DS_PICKUP_COMPLETED As Integer = 1
+    Const DS_DELIVERY_COMPLETED As Integer = 2
+
     Public Delegate Function TOnNewDeliveryFunc(
 <MarshalAs(UnmanagedType.LPWStr)> ByVal AOrderNo As String,
 <MarshalAs(UnmanagedType.LPWStr)> ByVal ARoadNameAddress As String,
@@ -20,7 +24,8 @@ Public Class FrmBaminOrderRelationMain
 <MarshalAs(UnmanagedType.LPWStr)> ByVal APhoneNo As String,
 <MarshalAs(UnmanagedType.LPWStr)> ByVal ALatitude As String,
 <MarshalAs(UnmanagedType.LPWStr)> ByVal ALongitude As String,
-<MarshalAs(UnmanagedType.LPWStr)> ByVal ATitle As String, ByVal AQuantity As Integer, ByVal AAmount As Integer, ByVal APaymentType As Integer) As Boolean
+<MarshalAs(UnmanagedType.LPWStr)> ByVal ATitle As String, ByVal AQuantity As Integer, ByVal AAmount As Integer, ByVal APaymentType As Integer,
+<MarshalAs(UnmanagedType.LPWStr)> ByVal AMemo As String) As Boolean
     Public Delegate Sub TOnStatusChangedProc(
 <MarshalAs(UnmanagedType.LPWStr)> ByVal AOrderNo As String, ByVal AOrderStatus As Integer)
     Public Delegate Sub TOnDisconnectedProc()
@@ -32,7 +37,7 @@ Public Class FrmBaminOrderRelationMain
 
 
     <DllImport("BMOrderRelay.dll", EntryPoint:="InitializeService", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
-    Public Shared Function InitializeService32(ByVal ASignKey As String) As Integer
+    Public Shared Function InitializeService32(<MarshalAs(UnmanagedType.LPWStr)> ByVal ASignKey As String) As Integer
 
     End Function
     <DllImport("BMOrderRelay.dll", EntryPoint:="FinalizeService", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
@@ -52,12 +57,21 @@ Public Class FrmBaminOrderRelationMain
 
     End Function
     <DllImport("BMOrderRelay.dll", EntryPoint:="SetDeliveryCompleted", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
-    Public Shared Function SetDeliveryCompleted32(ByVal AOrderNo As String) As Boolean
+    Public Shared Function SetDeliveryCompleted32(<MarshalAs(UnmanagedType.LPWStr)> ByVal AOrderNo As String) As Boolean
+
+    End Function
+    <DllImport("BMOrderRelay.dll", EntryPoint:="UpdateDeliveryStatus", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function UpdateDeliveryStatus32(
+                                                 <MarshalAs(UnmanagedType.LPWStr)> ByVal AOrderNo As String,
+                                                 ByVal ADeliveryStatus As Integer,
+                                                 <MarshalAs(UnmanagedType.LPWStr)> ByVal ARiderKey As String,
+                                                 <MarshalAs(UnmanagedType.LPWStr)> ByVal ARiderName As String,
+                                                 ByVal ETA As Integer) As Boolean
 
     End Function
 
     <DllImport("BMOrderRelayx64.dll", EntryPoint:="InitializeService", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
-    Public Shared Function InitializeService64(ByVal ASignKey As String) As Integer
+    Public Shared Function InitializeService64(<MarshalAs(UnmanagedType.LPWStr)> ByVal ASignKey As String) As Integer
 
     End Function
     <DllImport("BMOrderRelayx64.dll", EntryPoint:="FinalizeService", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
@@ -77,9 +91,19 @@ Public Class FrmBaminOrderRelationMain
 
     End Function
     <DllImport("BMOrderRelayx64.dll", EntryPoint:="SetDeliveryCompleted", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
-    Public Shared Function SetDeliveryCompleted64(ByVal AOrderNo As String) As Boolean
+    Public Shared Function SetDeliveryCompleted64(<MarshalAs(UnmanagedType.LPWStr)> ByVal AOrderNo As String) As Boolean
 
     End Function
+    <DllImport("BMOrderRelayx64.dll", EntryPoint:="UpdateDeliveryStatus", CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Unicode)>
+    Public Shared Function UpdateDeliveryStatus64(
+                                                 <MarshalAs(UnmanagedType.LPWStr)> ByVal AOrderNo As String,
+                                                 ByVal ADeliveryStatus As Integer,
+                                                 <MarshalAs(UnmanagedType.LPWStr)> ByVal ARiderKey As String,
+                                                 <MarshalAs(UnmanagedType.LPWStr)> ByVal ARiderName As String,
+                                                 ByVal ETA As Integer) As Boolean
+
+    End Function
+
 
     Public Shared Function InitializeService(ByVal ASignKey As String) As Integer
         If (Environment.Is64BitOperatingSystem = True) Then
@@ -129,6 +153,13 @@ Public Class FrmBaminOrderRelationMain
         End If
     End Function
 
+    Public Shared Function UpdateDeliveryStatus(ByVal AOrderNo As String, ByVal ADeliveryStatus As Integer, ByVal ARiderKey As String, ByVal ARiderName As String, ByVal ETA As Integer) As Boolean
+        If (Environment.Is64BitOperatingSystem = True) Then
+            Return UpdateDeliveryStatus64(AOrderNo, ADeliveryStatus, ARiderKey, ARiderName, ETA)
+        Else
+            Return UpdateDeliveryStatus32(AOrderNo, ADeliveryStatus, ARiderKey, ARiderName, ETA)
+        End If
+    End Function
 
     Public Sub New()
         InitializeComponent()
@@ -145,7 +176,8 @@ Public Class FrmBaminOrderRelationMain
         <MarshalAs(UnmanagedType.LPWStr)> ByVal APhoneNo As String,
         <MarshalAs(UnmanagedType.LPWStr)> ByVal ALatitude As String,
         <MarshalAs(UnmanagedType.LPWStr)> ByVal ALongitude As String,
-        <MarshalAs(UnmanagedType.LPWStr)> ByVal ATitle As String, ByVal AQuantity As Integer, ByVal AAmount As Integer, ByVal APaymentType As Integer) As Boolean
+        <MarshalAs(UnmanagedType.LPWStr)> ByVal ATitle As String, ByVal AQuantity As Integer, ByVal AAmount As Integer, ByVal APaymentType As Integer,
+        <MarshalAs(UnmanagedType.LPWStr)> ByVal AMemo As String) As Boolean
         Invoke(New MethodInvoker(Sub()
                                      RichTextBox1.AppendText("[New Delivery]" & Environment.NewLine)
                                      RichTextBox1.AppendText("AOrderNo: " & AOrderNo & Environment.NewLine)
@@ -158,6 +190,8 @@ Public Class FrmBaminOrderRelationMain
                                      RichTextBox1.AppendText("ATitle: " & ATitle & Environment.NewLine)
                                      RichTextBox1.AppendText("AQuantity: " & AQuantity & Environment.NewLine)
                                      RichTextBox1.AppendText("AAmount: " & AAmount & Environment.NewLine)
+                                     RichTextBox1.AppendText("AAmount: " & AAmount & Environment.NewLine)
+                                     RichTextBox1.AppendText("AMemo: " & AMemo & Environment.NewLine)
 
                                      Select Case APaymentType
                                          Case PT_PREPAYED
@@ -240,7 +274,7 @@ Public Class FrmBaminOrderRelationMain
     End Sub
 
     Private Sub BtnInitializeService_Click(sender As Object, e As EventArgs) Handles BtnInitializeService.Click
-        If InitializeService("Test Mode Gear") <> S_OK Then
+        If InitializeService("hJTk2rWrfc6C1UEmk9Uvc2MGpUuOpEw3q8i1/4+EUcFObqlNhzCvVHFM") <> S_OK Then
             MessageBox.Show("InitializeService Failed")
         End If
 
@@ -267,5 +301,36 @@ Public Class FrmBaminOrderRelationMain
             SetDeliveryCompleted(text)
         End If
 
+    End Sub
+
+    Private Sub btnUpdateDeliveryStatus_Click(sender As Object, e As EventArgs) Handles btnUpdateDeliveryStatus.Click
+        If ListView1.SelectedIndices.Count <= 0 Then
+            Return
+        End If
+
+        Dim intselectedindex As Integer = ListView1.SelectedIndices(0)
+
+        If intselectedindex >= 0 Then
+            Dim text As String = ListView1.Items(intselectedindex).Text
+
+            Dim changeRiderStatus As Form3 = New Form3()
+
+            changeRiderStatus.tbOrderNo.Text = text
+
+            Dim Res As DialogResult = changeRiderStatus.ShowDialog(Me)
+            If Res = DialogResult.OK Then
+
+                Dim DeliveryStatus As Integer = DS_RIDER_ASSIGNED
+                If (changeRiderStatus.rbRiderAssigned.Checked = True) Then
+                    DeliveryStatus = DS_RIDER_ASSIGNED
+                ElseIf (changeRiderStatus.rbPickupCompleted.Checked = True) Then
+                    DeliveryStatus = DS_PICKUP_COMPLETED
+                ElseIf (changeRiderStatus.rbDeliveryCompleted.Checked = True) Then
+                    DeliveryStatus = DS_DELIVERY_COMPLETED
+                End If
+
+                UpdateDeliveryStatus(changeRiderStatus.tbOrderNo.Text, DeliveryStatus, changeRiderStatus.tbRiderCode.Text, changeRiderStatus.tbRiderName.Text, Convert.ToInt32(changeRiderStatus.tbETA.Text))
+            End If
+        End If
     End Sub
 End Class

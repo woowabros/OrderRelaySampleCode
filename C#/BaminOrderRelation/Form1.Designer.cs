@@ -38,6 +38,7 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.btnUpdateDeliveryStatus = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRegCallback
@@ -73,7 +74,7 @@
             // btnSetDeliveryCompleted
             // 
             this.btnSetDeliveryCompleted.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetDeliveryCompleted.Location = new System.Drawing.Point(1567, 12);
+            this.btnSetDeliveryCompleted.Location = new System.Drawing.Point(1338, 12);
             this.btnSetDeliveryCompleted.Name = "btnSetDeliveryCompleted";
             this.btnSetDeliveryCompleted.Size = new System.Drawing.Size(223, 43);
             this.btnSetDeliveryCompleted.TabIndex = 3;
@@ -131,11 +132,23 @@
             this.richTextBox1.TabIndex = 5;
             this.richTextBox1.Text = "";
             // 
+            // btnUpdateDeliveryStatus
+            // 
+            this.btnUpdateDeliveryStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdateDeliveryStatus.Location = new System.Drawing.Point(1567, 12);
+            this.btnUpdateDeliveryStatus.Name = "btnUpdateDeliveryStatus";
+            this.btnUpdateDeliveryStatus.Size = new System.Drawing.Size(223, 43);
+            this.btnUpdateDeliveryStatus.TabIndex = 6;
+            this.btnUpdateDeliveryStatus.Text = "라이더 상태변경";
+            this.btnUpdateDeliveryStatus.UseVisualStyleBackColor = true;
+            this.btnUpdateDeliveryStatus.Click += new System.EventHandler(this.btnUpdateDeliveryStatus_Click);
+            // 
             // FrmBaminOrderRelationMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1802, 1058);
+            this.Controls.Add(this.btnUpdateDeliveryStatus);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.btnSetDeliveryCompleted);
@@ -160,6 +173,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Button btnUpdateDeliveryStatus;
     }
 }
 

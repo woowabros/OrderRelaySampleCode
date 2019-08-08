@@ -9,7 +9,8 @@ uses
 
 type
   TOnNewDeliveryFunc = function(AOrderNo, ARoadNameAddress, AAddress, AAddressDetail, APhoneNo: PWideChar;
-  ALatitude, ALongitude: PWideChar; ATitle: PWideChar; AQuantity: Integer; AAmount, APaymentType: Integer): Boolean; stdcall;
+    ALatitude, ALongitude: PWideChar; ATitle: PWideChar; AQuantity: Integer; AAmount, APaymentType: Integer;
+    Amemo: PWideChar): Boolean; stdcall;
   TOnStatusChangedProc = procedure(AOrderNo: PWideChar; AOrderStatus: Integer); stdcall;
   TOnDisconnectedProc = procedure(); stdcall;
 
@@ -37,18 +38,22 @@ type
     ListView1: TListView;
     btnSetDeliveryCompleted: TButton;
     btnFinalizeService: TButton;
+    btnChangeRiderStatus: TButton;
     procedure btnRegCallbackClick(Sender: TObject);
     procedure btnInitializeServiceClick(Sender: TObject);
     procedure btnSetDeliveryCompletedClick(Sender: TObject);
     procedure ListView1Click(Sender: TObject);
     procedure btnFinalizeServiceClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnChangeRiderStatusClick(Sender: TObject);
   private
   public
 
   end;
 
 function OnNewDeliveryFunc(AOrderNo, ARoadNameAddress, AAddress, AAddressDetail, APhoneNo: PWideChar;
-  ALatitude, ALongitude: PWideChar; ATitle: PWideChar; AQuantity: Integer; AAmount, APaymentType: Integer): Boolean; stdcall;
+  ALatitude, ALongitude: PWideChar; ATitle: PWideChar; AQuantity: Integer; AAmount, APaymentType: Integer;
+  AMemo: PWideChar): Boolean; stdcall;
 procedure OnStatusChangedProc(AOrderNo: PWideChar; AOrderStatus: Integer); stdcall;
 procedure OnDisconnectedProc(); stdcall;
 
@@ -60,7 +65,11 @@ const
   OS_NEW = 0;
   OS_RECEIPT = 1;
   OS_COMPLETED = 2;
-  OS_CANCELED = 3;  
+  OS_CANCELED = 3;
+
+  DS_RIDER_ASSIGNED = 0;
+  DS_PICKUP_COMPLETED = 1;
+  DS_DELIVERY_COMPLETED = 2;
 
 const
   ERR_CONNECTION_FAILED = -1;
@@ -75,22 +84,30 @@ implementation
 
 {$R *.dfm}
 
-uses CreateDelivery;
+uses CreateDelivery, ChangeDeliveryStatus;
 
 {$IFDEF WIN64}
+function IsBaeminInstalled(): Boolean; stdcall; external 'BMOrderRelayx64.dll';
+function IsBaeminRunning(): Boolean; stdcall; external 'BMOrderRelayx64.dll';
 function RegisterNewDeliveryFunction(AEvent: TOnNewDeliveryFunc): Boolean; stdcall; external 'BMOrderRelayx64.dll';
 function RegisterStatusChangedFunction(AEvent: TOnStatusChangedProc): Boolean; stdcall; external 'BMOrderRelayx64.dll';
 function RegisterDisconnectedFunction(AEvent: TOnDisconnectedProc): Boolean; stdcall; external 'BMOrderRelayx64.dll';
 function InitializeService(ASignKey: PWideChar): Integer; stdcall; external 'BMOrderRelayx64.dll';
 function FinalizeService(): Integer; stdcall; external 'BMOrderRelayx64.dll';
 function SetDeliveryCompleted(AOrderNo: PWideChar): Boolean; stdcall; external 'BMOrderRelayx64.dll';
+function UpdateDeliveryStatus(AOrderNo: PWideChar; ADeliveryStatus: Integer;
+  ARiderKey: PWideChar; ARiderName: PWideChar; ETA: Integer): Boolean; stdcall; external 'BMOrderRelayx64.dll';
 {$ELSE}
+function IsBaeminInstalled(): Boolean; stdcall; external 'BMOrderRelay.dll';
+function IsBaeminRunning(): Boolean; stdcall; external 'BMOrderRelay.dll';
 function RegisterNewDeliveryFunction(AEvent: TOnNewDeliveryFunc): Boolean; stdcall; external 'BMOrderRelay.dll';
 function RegisterStatusChangedFunction(AEvent: TOnStatusChangedProc): Boolean; stdcall; external 'BMOrderRelay.dll';
 function RegisterDisconnectedFunction(AEvent: TOnDisconnectedProc): Boolean; stdcall; external 'BMOrderRelay.dll';
 function InitializeService(ASignKey: PWideChar): Integer; stdcall; external 'BMOrderRelay.dll';
 function FinalizeService(): Integer; stdcall; external 'BMOrderRelay.dll';
 function SetDeliveryCompleted(AOrderNo: PWideChar): Boolean; stdcall; external 'BMOrderRelay.dll';
+function UpdateDeliveryStatus(AOrderNo: PWideChar; ADeliveryStatus: Integer;
+  ARiderKey: PWideChar; ARiderName: PWideChar; ETA: Integer): Boolean; stdcall; external 'BMOrderRelay.dll';
 {$ENDIF}
 
 { TFrmBaminOrderRelationMain }
@@ -104,7 +121,8 @@ end;
 
 procedure TFrmBaminOrderRelationMain.btnInitializeServiceClick(Sender: TObject);
 begin
-  if InitializeService(PChar('Test Mode Gear')) <> S_OK then
+  //if InitializeService(PChar('Test Mode Gear')) <> S_OK then
+  if InitializeService(PChar('hJTk2rWrfc6C1UEmk9Uvc2MGpUuOpEw3q8i1/4+EUcFObqlNhzCvVHFM')) <> S_OK then
     ShowMessage('Error InitializeService');
   Memo1.Lines.Add('Initialize Service');
 end;
@@ -136,13 +154,41 @@ begin
   end;
 end;
 
+procedure TFrmBaminOrderRelationMain.btnChangeRiderStatusClick(Sender: TObject);
+var
+  Item : TListItem;
+  ItemData : PDeliveryItem;
+begin
+  Item := ListView1.Selected;
+  if Item = nil then Exit;
+  ItemData := PDeliveryItem(Item.Data);
+  if ItemData = nil then Exit;
+
+  FrmChangeDeliveryStatus.edOrderNo.Text := ItemData.OrderNo;
+  if FrmChangeDeliveryStatus.ShowModal = mrOk then
+  begin
+    with FrmChangeDeliveryStatus do
+    begin
+      UpdateDeliveryStatus(PWideChar(ItemData.OrderNo), rgDeliveryStatus.ItemIndex, PWideChar(edRiderCode.Text), PWideChar(edRiderName.Text), seETA.Value);
+    end;
+  end;
+end;
+
+procedure TFrmBaminOrderRelationMain.FormShow(Sender: TObject);
+begin
+  if IsBaeminInstalled() then
+    Memo1.Lines.Add('PC접수가 설치되었습니다.');
+end;
+
 procedure TFrmBaminOrderRelationMain.ListView1Click(Sender: TObject);
 begin
   btnSetDeliveryCompleted.Enabled := (ListView1.Selected <> nil);
+  btnChangeRiderStatus.Enabled := (ListView1.Selected <> nil);
 end;
 
 function OnNewDeliveryFunc(AOrderNo, ARoadNameAddress, AAddress, AAddressDetail, APhoneNo: PWideChar;
-  ALatitude, ALongitude: PWideChar; ATitle: PWideChar; AQuantity: Integer; AAmount, APaymentType: Integer): Boolean;
+  ALatitude, ALongitude: PWideChar; ATitle: PWideChar; AQuantity: Integer; AAmount, APaymentType: Integer;
+  AMemo: PWideChar): Boolean;
 var
   Res : Boolean;
 begin
@@ -173,7 +219,8 @@ begin
         PT_MEET_CARD: Memo1.Lines.Add('Payment Type: 만나서 결제 카드');
         PT_MEET_CASH: Memo1.Lines.Add('Payment Type: 만나서 결제 현금');
       end;
-
+      if AMemo <> '' then
+        Memo1.Lines.Add('Memo: ' + AMemo);
     end;
     frmNew := TFrmCreateDelivery.Create(FrmBaminOrderRelationMain);
     try
