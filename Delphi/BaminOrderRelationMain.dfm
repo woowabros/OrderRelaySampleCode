@@ -81,23 +81,13 @@ object FrmBaminOrderRelationMain: TFrmBaminOrderRelationMain
     ViewStyle = vsReport
     OnClick = ListView1Click
   end
-  object btnSetDeliveryCompleted: TButton
-    Left = 718
-    Top = 25
-    Width = 136
-    Height = 33
-    Anchors = [akTop, akRight]
-    Caption = #48176#45804' '#50756#47308
-    TabOrder = 4
-    OnClick = btnSetDeliveryCompletedClick
-  end
   object btnFinalizeService: TButton
     Left = 327
     Top = 25
     Width = 154
     Height = 33
     Caption = '3. '#49436#48708#49828' '#51333#47308
-    TabOrder = 5
+    TabOrder = 4
     OnClick = btnFinalizeServiceClick
   end
   object btnChangeRiderStatus: TButton
@@ -107,7 +97,7 @@ object FrmBaminOrderRelationMain: TFrmBaminOrderRelationMain
     Height = 33
     Anchors = [akTop, akRight]
     Caption = #46972#51060#45908' '#49345#53468' '#48320#44221
-    TabOrder = 6
+    TabOrder = 5
     OnClick = btnChangeRiderStatusClick
   end
 end

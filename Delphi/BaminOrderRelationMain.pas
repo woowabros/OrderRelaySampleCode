@@ -36,12 +36,10 @@ type
     btnRegCallback: TButton;
     btnInitializeService: TButton;
     ListView1: TListView;
-    btnSetDeliveryCompleted: TButton;
     btnFinalizeService: TButton;
     btnChangeRiderStatus: TButton;
     procedure btnRegCallbackClick(Sender: TObject);
     procedure btnInitializeServiceClick(Sender: TObject);
-    procedure btnSetDeliveryCompletedClick(Sender: TObject);
     procedure ListView1Click(Sender: TObject);
     procedure btnFinalizeServiceClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -94,7 +92,7 @@ function RegisterStatusChangedFunction(AEvent: TOnStatusChangedProc): Boolean; s
 function RegisterDisconnectedFunction(AEvent: TOnDisconnectedProc): Boolean; stdcall; external 'BMOrderRelayx64.dll';
 function InitializeService(ASignKey: PWideChar): Integer; stdcall; external 'BMOrderRelayx64.dll';
 function FinalizeService(): Integer; stdcall; external 'BMOrderRelayx64.dll';
-function SetDeliveryCompleted(AOrderNo: PWideChar): Boolean; stdcall; external 'BMOrderRelayx64.dll';
+function SetDeliveryCompleted(AOrderNo: PWideChar): Boolean; stdcall; external 'BMOrderRelayx64.dll'; deprecated;
 function UpdateDeliveryStatus(AOrderNo: PWideChar; ADeliveryStatus: Integer;
   ARiderKey: PWideChar; ARiderName: PWideChar; ETA: Integer): Boolean; stdcall; external 'BMOrderRelayx64.dll';
 {$ELSE}
@@ -105,7 +103,7 @@ function RegisterStatusChangedFunction(AEvent: TOnStatusChangedProc): Boolean; s
 function RegisterDisconnectedFunction(AEvent: TOnDisconnectedProc): Boolean; stdcall; external 'BMOrderRelay.dll';
 function InitializeService(ASignKey: PWideChar): Integer; stdcall; external 'BMOrderRelay.dll';
 function FinalizeService(): Integer; stdcall; external 'BMOrderRelay.dll';
-function SetDeliveryCompleted(AOrderNo: PWideChar): Boolean; stdcall; external 'BMOrderRelay.dll';
+function SetDeliveryCompleted(AOrderNo: PWideChar): Boolean; stdcall; external 'BMOrderRelay.dll'; deprecated;
 function UpdateDeliveryStatus(AOrderNo: PWideChar; ADeliveryStatus: Integer;
   ARiderKey: PWideChar; ARiderName: PWideChar; ETA: Integer): Boolean; stdcall; external 'BMOrderRelay.dll';
 {$ENDIF}
@@ -138,22 +136,6 @@ begin
   Memo1.Lines.Add('Register Callback Functions');
 end;
 
-procedure TFrmBaminOrderRelationMain.btnSetDeliveryCompletedClick(Sender: TObject);
-var
-  Item : TListItem;
-  ItemData : PDeliveryItem;
-begin
-  Item := ListView1.Selected;
-  if Item = nil then Exit;
-  ItemData := PDeliveryItem(Item.Data);
-  if ItemData = nil then Exit;
-  if SetDeliveryCompleted( PWideChar(ItemData.OrderNo)) then
-  begin
-    Dispose(ItemData);
-    ListView1.Items.Delete(Item.Index);
-  end;
-end;
-
 procedure TFrmBaminOrderRelationMain.btnChangeRiderStatusClick(Sender: TObject);
 var
   Item : TListItem;
@@ -182,7 +164,6 @@ end;
 
 procedure TFrmBaminOrderRelationMain.ListView1Click(Sender: TObject);
 begin
-  btnSetDeliveryCompleted.Enabled := (ListView1.Selected <> nil);
   btnChangeRiderStatus.Enabled := (ListView1.Selected <> nil);
 end;
 
@@ -192,6 +173,7 @@ function OnNewDeliveryFunc(AOrderNo, ARoadNameAddress, AAddress, AAddressDetail,
 var
   Res : Boolean;
 begin
+  Result := False;
   Res := False;
   TThread.Synchronize(nil, TThreadProcedure(
   procedure
