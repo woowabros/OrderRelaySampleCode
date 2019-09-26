@@ -30,7 +30,6 @@ Partial Class FrmBaminOrderRelationMain
         Me.BtnRegisterCallback = New System.Windows.Forms.Button()
         Me.BtnInitializeService = New System.Windows.Forms.Button()
         Me.BtnFinalizeService = New System.Windows.Forms.Button()
-        Me.BtnSetDeliveryCompleted = New System.Windows.Forms.Button()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.btnUpdateDeliveryStatus = New System.Windows.Forms.Button()
         Me.SuspendLayout()
@@ -90,22 +89,12 @@ Partial Class FrmBaminOrderRelationMain
         '
         'BtnFinalizeService
         '
-        Me.BtnFinalizeService.Location = New System.Drawing.Point(580, 12)
+        Me.BtnFinalizeService.Location = New System.Drawing.Point(548, 12)
         Me.BtnFinalizeService.Name = "BtnFinalizeService"
         Me.BtnFinalizeService.Size = New System.Drawing.Size(307, 39)
         Me.BtnFinalizeService.TabIndex = 3
         Me.BtnFinalizeService.Text = "3. 서비스 종료"
         Me.BtnFinalizeService.UseVisualStyleBackColor = True
-        '
-        'BtnSetDeliveryCompleted
-        '
-        Me.BtnSetDeliveryCompleted.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BtnSetDeliveryCompleted.Location = New System.Drawing.Point(1408, 12)
-        Me.BtnSetDeliveryCompleted.Name = "BtnSetDeliveryCompleted"
-        Me.BtnSetDeliveryCompleted.Size = New System.Drawing.Size(262, 39)
-        Me.BtnSetDeliveryCompleted.TabIndex = 4
-        Me.BtnSetDeliveryCompleted.Text = "배달 완료"
-        Me.BtnSetDeliveryCompleted.UseVisualStyleBackColor = True
         '
         'RichTextBox1
         '
@@ -134,7 +123,6 @@ Partial Class FrmBaminOrderRelationMain
         Me.ClientSize = New System.Drawing.Size(1911, 1021)
         Me.Controls.Add(Me.btnUpdateDeliveryStatus)
         Me.Controls.Add(Me.RichTextBox1)
-        Me.Controls.Add(Me.BtnSetDeliveryCompleted)
         Me.Controls.Add(Me.BtnFinalizeService)
         Me.Controls.Add(Me.BtnInitializeService)
         Me.Controls.Add(Me.BtnRegisterCallback)
@@ -153,7 +141,6 @@ Partial Class FrmBaminOrderRelationMain
     Friend WithEvents BtnRegisterCallback As Button
     Friend WithEvents BtnInitializeService As Button
     Friend WithEvents BtnFinalizeService As Button
-    Friend WithEvents BtnSetDeliveryCompleted As Button
     Friend WithEvents RichTextBox1 As RichTextBox
     Private WithEvents btnUpdateDeliveryStatus As Button
 End Class

@@ -145,6 +145,7 @@ Public Class FrmBaminOrderRelationMain
         End If
     End Function
 
+    <Obsolete("SetDeliveryCompleted is deprecated, please use UpdateDeliveryStatus instead.")>
     Public Shared Function SetDeliveryCompleted(ByVal AOrderNo As String) As Boolean
         If (Environment.Is64BitOperatingSystem = True) Then
             Return SetDeliveryCompleted64(AOrderNo)
@@ -178,71 +179,72 @@ Public Class FrmBaminOrderRelationMain
         <MarshalAs(UnmanagedType.LPWStr)> ByVal ALongitude As String,
         <MarshalAs(UnmanagedType.LPWStr)> ByVal ATitle As String, ByVal AQuantity As Integer, ByVal AAmount As Integer, ByVal APaymentType As Integer,
         <MarshalAs(UnmanagedType.LPWStr)> ByVal AMemo As String) As Boolean
-        Invoke(New MethodInvoker(Sub()
-                                     RichTextBox1.AppendText("[New Delivery]" & Environment.NewLine)
-                                     RichTextBox1.AppendText("AOrderNo: " & AOrderNo & Environment.NewLine)
-                                     RichTextBox1.AppendText("ARoadNameAddress: " & ARoadNameAddress & Environment.NewLine)
-                                     RichTextBox1.AppendText("AAddress: " & AAddress & Environment.NewLine)
-                                     RichTextBox1.AppendText("AAddressDetail: " & AAddressDetail & Environment.NewLine)
-                                     RichTextBox1.AppendText("APhoneNo: " & APhoneNo & Environment.NewLine)
-                                     RichTextBox1.AppendText("ALatitude: " & ALatitude & Environment.NewLine)
-                                     RichTextBox1.AppendText("ALongitude: " & ALongitude & Environment.NewLine)
-                                     RichTextBox1.AppendText("ATitle: " & ATitle & Environment.NewLine)
-                                     RichTextBox1.AppendText("AQuantity: " & AQuantity & Environment.NewLine)
-                                     RichTextBox1.AppendText("AAmount: " & AAmount & Environment.NewLine)
-                                     RichTextBox1.AppendText("AAmount: " & AAmount & Environment.NewLine)
-                                     RichTextBox1.AppendText("AMemo: " & AMemo & Environment.NewLine)
+        Return Invoke(New MethodInvoker(Function() As Boolean
+                                            RichTextBox1.AppendText("[New Delivery]" & Environment.NewLine)
+                                            RichTextBox1.AppendText("AOrderNo: " & AOrderNo & Environment.NewLine)
+                                            RichTextBox1.AppendText("ARoadNameAddress: " & ARoadNameAddress & Environment.NewLine)
+                                            RichTextBox1.AppendText("AAddress: " & AAddress & Environment.NewLine)
+                                            RichTextBox1.AppendText("AAddressDetail: " & AAddressDetail & Environment.NewLine)
+                                            RichTextBox1.AppendText("APhoneNo: " & APhoneNo & Environment.NewLine)
+                                            RichTextBox1.AppendText("ALatitude: " & ALatitude & Environment.NewLine)
+                                            RichTextBox1.AppendText("ALongitude: " & ALongitude & Environment.NewLine)
+                                            RichTextBox1.AppendText("ATitle: " & ATitle & Environment.NewLine)
+                                            RichTextBox1.AppendText("AQuantity: " & AQuantity & Environment.NewLine)
+                                            RichTextBox1.AppendText("AAmount: " & AAmount & Environment.NewLine)
+                                            RichTextBox1.AppendText("AAmount: " & AAmount & Environment.NewLine)
+                                            RichTextBox1.AppendText("AMemo: " & AMemo & Environment.NewLine)
 
-                                     Select Case APaymentType
-                                         Case PT_PREPAYED
-                                             RichTextBox1.AppendText("PaymentType: 바로결제" & Environment.NewLine)
-                                         Case PT_MEET_CARD
-                                             RichTextBox1.AppendText("PaymentType: 만나서 결제 카드" & Environment.NewLine)
-                                         Case PT_MEET_CASH
-                                             RichTextBox1.AppendText("PaymentType: 만나서 결제 현금" & Environment.NewLine)
-                                         Case Else
-                                             Console.WriteLine("Default case")
-                                     End Select
+                                            Select Case APaymentType
+                                                Case PT_PREPAYED
+                                                    RichTextBox1.AppendText("PaymentType: 바로결제" & Environment.NewLine)
+                                                Case PT_MEET_CARD
+                                                    RichTextBox1.AppendText("PaymentType: 만나서 결제 카드" & Environment.NewLine)
+                                                Case PT_MEET_CASH
+                                                    RichTextBox1.AppendText("PaymentType: 만나서 결제 현금" & Environment.NewLine)
+                                                Case Else
+                                                    Console.WriteLine("Default case")
+                                            End Select
 
-                                     Dim addDelivery As Form2 = New Form2()
-                                     addDelivery.tbOrderNo.Text = AOrderNo
-                                     addDelivery.tbRoadName.Text = ARoadNameAddress
-                                     addDelivery.tbAddress.Text = AAddress
-                                     addDelivery.tbAddressDetail.Text = AAddressDetail
-                                     addDelivery.tbPhoneNo.Text = APhoneNo
-                                     addDelivery.tbLatitude.Text = ALatitude
-                                     addDelivery.tbLongitude.Text = ALongitude
-                                     addDelivery.tbTitle.Text = ATitle
-                                     addDelivery.tbTotalAmount.Text = AAmount.ToString()
-                                     addDelivery.tbTotalCount.Text = AQuantity.ToString()
+                                            Dim addDelivery As Form2 = New Form2()
+                                            addDelivery.tbOrderNo.Text = AOrderNo
+                                            addDelivery.tbRoadName.Text = ARoadNameAddress
+                                            addDelivery.tbAddress.Text = AAddress
+                                            addDelivery.tbAddressDetail.Text = AAddressDetail
+                                            addDelivery.tbPhoneNo.Text = APhoneNo
+                                            addDelivery.tbLatitude.Text = ALatitude
+                                            addDelivery.tbLongitude.Text = ALongitude
+                                            addDelivery.tbTitle.Text = ATitle
+                                            addDelivery.tbTotalAmount.Text = AAmount.ToString()
+                                            addDelivery.tbTotalCount.Text = AQuantity.ToString()
 
-                                     Select Case APaymentType
-                                         Case PT_PREPAYED
-                                             addDelivery.rbPrepaid.Checked = True
-                                         Case PT_MEET_CARD
-                                             addDelivery.rbMeetCard.Checked = True
-                                         Case PT_MEET_CASH
-                                             addDelivery.rbMeetCash.Checked = True
-                                         Case Else
-                                             Console.WriteLine("Default case")
-                                     End Select
+                                            Select Case APaymentType
+                                                Case PT_PREPAYED
+                                                    addDelivery.rbPrepaid.Checked = True
+                                                Case PT_MEET_CARD
+                                                    addDelivery.rbMeetCard.Checked = True
+                                                Case PT_MEET_CASH
+                                                    addDelivery.rbMeetCash.Checked = True
+                                                Case Else
+                                                    Console.WriteLine("Default case")
+                                            End Select
 
-                                     Dim Res As DialogResult = addDelivery.ShowDialog(Me)
+                                            Dim Res As DialogResult = addDelivery.ShowDialog(Me)
 
-                                     If Res = DialogResult.OK Then
-                                         Dim item As ListViewItem = New ListViewItem(AOrderNo)
-                                         item.SubItems.Add(ARoadNameAddress & " " & AAddressDetail)
-                                         item.SubItems.Add("바로결제")
-                                         If addDelivery.rbPrepaid.Checked Then
-                                             item.SubItems.Add("'만나서 결제 카드")
-                                         ElseIf addDelivery.rbMeetCard.Checked Then
-                                             item.SubItems.Add("만나서 결제 현금")
-                                         End If
-                                         ListView1.Items.Add(item)
-                                     End If
-                                 End Sub))
-        RichTextBox1.AppendText(AOrderNo.ToString + " " + ARoadNameAddress.ToString + AAddress.ToString + " " + AAddressDetail.ToString + vbCrLf)
-        Return True
+                                            If Res = DialogResult.OK Then
+                                                Dim item As ListViewItem = New ListViewItem(AOrderNo)
+                                                item.SubItems.Add(ARoadNameAddress & " " & AAddressDetail)
+                                                item.SubItems.Add("바로결제")
+                                                If addDelivery.rbPrepaid.Checked Then
+                                                    item.SubItems.Add("'만나서 결제 카드")
+                                                ElseIf addDelivery.rbMeetCard.Checked Then
+                                                    item.SubItems.Add("만나서 결제 현금")
+                                                End If
+                                                ListView1.Items.Add(item)
+                                            End If
+                                            RichTextBox1.AppendText(AOrderNo.ToString + " " + ARoadNameAddress.ToString + AAddress.ToString + " " + AAddressDetail.ToString + vbCrLf)
+                                            Return True
+                                        End Function))
+
     End Function
 
     Public Sub OnStatusChanged(<MarshalAs(UnmanagedType.LPWStr)> ByVal AOrderNo As String, ByVal AOrderStatus As Integer)
@@ -287,20 +289,6 @@ Public Class FrmBaminOrderRelationMain
         End If
 
         RichTextBox1.AppendText("Finalize Service" & Environment.NewLine)
-    End Sub
-
-    Private Sub BtnSetDeliveryCompleted_Click(sender As Object, e As EventArgs) Handles BtnSetDeliveryCompleted.Click
-        If ListView1.SelectedIndices.Count <= 0 Then
-            Return
-        End If
-
-        Dim intselectedindex As Integer = ListView1.SelectedIndices(0)
-
-        If intselectedindex >= 0 Then
-            Dim text As String = ListView1.Items(intselectedindex).Text
-            SetDeliveryCompleted(text)
-        End If
-
     End Sub
 
     Private Sub btnUpdateDeliveryStatus_Click(sender As Object, e As EventArgs) Handles btnUpdateDeliveryStatus.Click

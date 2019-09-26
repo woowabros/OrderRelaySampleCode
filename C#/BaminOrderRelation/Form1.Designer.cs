@@ -31,7 +31,6 @@
             this.btnRegCallback = new System.Windows.Forms.Button();
             this.btnInitializeService = new System.Windows.Forms.Button();
             this.btnFinalizeService = new System.Windows.Forms.Button();
-            this.btnSetDeliveryCompleted = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -70,17 +69,6 @@
             this.btnFinalizeService.Text = "3. 서비스 종료";
             this.btnFinalizeService.UseVisualStyleBackColor = true;
             this.btnFinalizeService.Click += new System.EventHandler(this.btnFinalizeService_Click);
-            // 
-            // btnSetDeliveryCompleted
-            // 
-            this.btnSetDeliveryCompleted.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetDeliveryCompleted.Location = new System.Drawing.Point(1338, 12);
-            this.btnSetDeliveryCompleted.Name = "btnSetDeliveryCompleted";
-            this.btnSetDeliveryCompleted.Size = new System.Drawing.Size(223, 43);
-            this.btnSetDeliveryCompleted.TabIndex = 3;
-            this.btnSetDeliveryCompleted.Text = "배달 완료";
-            this.btnSetDeliveryCompleted.UseVisualStyleBackColor = true;
-            this.btnSetDeliveryCompleted.Click += new System.EventHandler(this.btnSetDeliveryCompleted_Click);
             // 
             // listView1
             // 
@@ -151,7 +139,6 @@
             this.Controls.Add(this.btnUpdateDeliveryStatus);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.listView1);
-            this.Controls.Add(this.btnSetDeliveryCompleted);
             this.Controls.Add(this.btnFinalizeService);
             this.Controls.Add(this.btnInitializeService);
             this.Controls.Add(this.btnRegCallback);
@@ -166,7 +153,6 @@
         private System.Windows.Forms.Button btnRegCallback;
         private System.Windows.Forms.Button btnInitializeService;
         private System.Windows.Forms.Button btnFinalizeService;
-        private System.Windows.Forms.Button btnSetDeliveryCompleted;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;

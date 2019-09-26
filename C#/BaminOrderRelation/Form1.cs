@@ -118,6 +118,7 @@ namespace BaminOrderRelation
             return Environment.Is64BitOperatingSystem ? RegisterDisconnectedFunction64(AEvent) : RegisterDisconnectedFunction32(AEvent);
         }
 
+        [Obsolete("SetDeliveryCompleted is deprecated, please use UpdateDeliveryStatus instead.")]
         public static bool SetDeliveryCompleted(string AOrderNo)
         {
             return Environment.Is64BitOperatingSystem ? SetDeliveryCompleted64(AOrderNo) : SetDeliveryCompleted32(AOrderNo);
@@ -135,21 +136,6 @@ namespace BaminOrderRelation
             s_newDeliveryFunc = this.MyOnNewDeliveryFunc;
             s_statusChangedProc = this.MyOnStatusChangedProc;
             s_disconnectedProc = this.MyOnDisconnectedProc;
-        }
-
-        private void btnSetDeliveryCompleted_Click(object sender, EventArgs e)
-        {
-            if (listView1.SelectedIndices.Count <= 0)
-            {
-                return;
-            }
-            int intselectedindex = listView1.SelectedIndices[0];
-            if (intselectedindex >= 0)
-            {
-                String text = listView1.Items[intselectedindex].Text;
-                SetDeliveryCompleted(text);
-
-            }
         }
 
         private void btnInitializeService_Click(object sender, EventArgs e)
