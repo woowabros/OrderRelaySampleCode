@@ -1,4 +1,5 @@
 ﻿
+// 코드가 엉망이네요 ㅎㅎ
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.438
@@ -8,7 +9,7 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Release|Any CPU = Release|Any CPU 
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B95B3B2B-38C3-4D43-B09B-7E72263816CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
